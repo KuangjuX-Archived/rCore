@@ -14,11 +14,13 @@
 global_asm!(include_str!("entry.asm"));
 
 use core::panic::PanicInfo;
+use crate::sbi::shutdown;
 
 // Call this function when panic happend
 #[panic_handler]
-fn panic(_info: &PanicInfo) -> ! {
-    loop {}
+fn panic(info: &PanicInfo) -> ! {
+    println!("\x1b[1;31mpanic: '{}'\x1b[0m", info.message().unwarp());
+    shutdown();
 }
 
 pub fn console_putchar(ch: u8) {
