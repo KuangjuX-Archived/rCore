@@ -10,18 +10,18 @@
 // Embed the entire assembly file
 #![feature(global_asm)]
 
+// Get message and print when panic!
+#![feature(panic_info_message)]
+
+#[macro_use]
+mod console;
+mod panic;
+mod sbi;
 
 global_asm!(include_str!("entry.asm"));
 
-use core::panic::PanicInfo;
-use crate::sbi::shutdown;
 
-// Call this function when panic happend
-#[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
-    println!("\x1b[1;31mpanic: '{}'\x1b[0m", info.message().unwarp());
-    shutdown();
-}
+
 
 pub fn console_putchar(ch: u8) {
     let _ret: usize;
@@ -42,9 +42,12 @@ pub fn console_putchar(ch: u8) {
 // override the _start function in crt0
 #[no_mangle]
 pub extern "C" fn rust_main() -> ! {
-    console_putchar(b'O');
-    console_putchar(b'K');
-    console_putchar(b'\n');
+    // console_putchar(b'O');
+    // console_putchar(b'K');
+    // console_putchar(b'\n');
 
-    loop {}
+    // loop {}
+
+    println!("Hello rCore-Tutorial!");
+    panic!("end of rust_main")
 }
