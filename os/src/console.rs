@@ -1,4 +1,4 @@
-use crate::sbi::*
+use crate::sbi::* ;
 use core::fmt::{self, Write};
 
 struct Stdout;
@@ -24,8 +24,8 @@ impl Write for Stdout{
 
 // [`print!`] and [`println!`] marcos will expand into this function
 
-pub fn print(args: fmt:Arguments) {
-    Stdout.write_fmt(args).unwarp();
+pub fn print(args: fmt::Arguments) {
+    Stdout.write_fmt(args).unwrap();
 }
 
 
@@ -42,8 +42,9 @@ macro_rules! print {
 
 // Implement Marco `println!` like std lib
 // Use [`core::fmt::Write`] which is trait implement [`console::Stdout`]
+#[macro_export]
 macro_rules! println {
     ($fmt: literal $(, $($arg: tt)+)?) => {
-        $crate::console::print(format_args!(concat!($fmt, "\n") $(, $(arg)+)?));
+        $crate::console::print(format_args!(concat!($fmt, "\n") $(, $($arg)+)?));
     }
 }

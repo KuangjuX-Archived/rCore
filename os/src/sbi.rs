@@ -5,15 +5,16 @@
 
 // SBI call
 #[inline(always)]
-fn sbi_call(which: usize, arg0: usize, arg1: usize. arg2: uszie) -> usize {
+fn sbi_call(which: usize, arg0: usize, arg1: usize, arg2: usize) -> usize {
     let ret;
     unsafe {
         llvm_asm!("ecall"
-            := "={x10}" (ret)
-            := "{x10}"  (arg0), "{x11}" (arg1), "{x12}" (arg2), "{x17}" (which)
-            := "memory"         // Add "memory" option to avoid assembly to modify memory
-            := "violatile");    // Avoid Compiler to make aggressive optimizations.
+            : "={x10}" (ret)
+            : "{x10}"  (arg0), "{x11}" (arg1), "{x12}" (arg2), "{x17}" (which)
+            : "memory"         // Add "memory" option to avoid assembly to modify memory
+            : "violatile");    // Avoid Compiler to make aggressive optimizations.
     }
+    ret
 }
 
 const SBI_SET_TIMER: usize = 0;
@@ -36,7 +37,7 @@ pub fn console_putchar(c: usize) {
 // Read char from Console
 // return -1 when not reading char
 pub fn console_getchar() -> usize {
-    sbi_call(SBI_CONSOLE_GETCHAR, 0, 0, 0);
+    sbi_call(SBI_CONSOLE_GETCHAR, 0, 0, 0)
 }
 
 
