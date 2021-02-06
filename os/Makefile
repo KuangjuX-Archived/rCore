@@ -17,7 +17,7 @@ kernel:
 	@cargo build
 
 $(BIN_FILE): kernel
-	@$(OBJCOPY) $(KERNEL_FILE) --strip-all -0 binary $@
+	@$(OBJCOPY) $(KERNEL_FILE) --strip-all -O binary $@
 
 asm:
 	@$(OBJDUMP) -d $(KERNEL_FILE) | less
