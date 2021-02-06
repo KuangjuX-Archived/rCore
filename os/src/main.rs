@@ -17,6 +17,7 @@
 mod console;
 mod panic;
 mod sbi;
+mod interrupt;
 
 global_asm!(include_str!("entry.asm"));
 
@@ -24,7 +25,12 @@ global_asm!(include_str!("entry.asm"));
 // override the _start function in crt0
 #[no_mangle]
 pub extern "C" fn rust_main() -> ! {
+    interrupt::init();
     println!("OK!");
     println!("Hello rCore-Tutorial!");
-    panic!("end of rust_main")
+    unsafe {
+        llvm_asm!("ebark"::::"volatile");
+    };
+    unreachable!();
+    // panic!("end of rust_main");
 }
