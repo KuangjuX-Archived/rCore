@@ -1,1 +1,0 @@
-/home/qcx/Desktop/rCore/os/target/riscv64imac-unknown-none-elf/debug/os: /home/qcx/Desktop/rCore/os/src/console.rs /home/qcx/Desktop/rCore/os/src/entry.asm /home/qcx/Desktop/rCore/os/src/main.rs /home/qcx/Desktop/rCore/os/src/panic.rs /home/qcx/Desktop/rCore/os/src/sbi.rs
