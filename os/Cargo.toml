@@ -15,4 +15,8 @@ panic = "abort"
 panic = "abort"
 
 [dependencies]
+# algorithm = { path = 'src/algorithm' }
+buddy_system_allocator = "0.7.0"
+lazy_static = { version = "1.4.0", features = ["spin_no_std"] }
 riscv = { git = "https://github.com/rcore-os/riscv", features = ["inline-asm"] }
+spin = "0.5.2"
