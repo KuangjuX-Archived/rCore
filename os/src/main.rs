@@ -46,23 +46,25 @@ pub extern "C" fn rust_main() {
 
     // unsafe { llvm_asm!("ebreak") };
 
-    use alloc::boxed::Box;
-    use alloc::vec::Vec;
-    let v = Box::new(5);
-    assert_eq!(*v, 5);
-    core::mem::drop(v);
+    // use alloc::boxed::Box;
+    // use alloc::vec::Vec;
+    // let v = Box::new(5);
+    // assert_eq!(*v, 5);
+    // core::mem::drop(v);
 
-    let mut vec = Vec::new();
-    for i in 0..10000 {
-        vec.push(i);
-    }
+    // let mut vec = Vec::new();
+    // for i in 0..10000 {
+    //     vec.push(i);
+    // }
 
-    assert_eq!(vec.len(), 10000);
-    for (i, value) in vec.into_iter().enumerate() {
-        assert_eq!(value, i);
-    }
+    // assert_eq!(vec.len(), 10000);
+    // for (i, value) in vec.into_iter().enumerate() {
+    //     assert_eq!(value, i);
+    // }
 
-    println!("heap test passed");
+    // println!("heap test passed");
+
+    println!("{}", *memory::config::KERNEL_END_ADDRESS);
 
     panic!("end of rust_main");
 }
