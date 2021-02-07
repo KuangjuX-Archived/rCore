@@ -1,7 +1,9 @@
 use super::context::Context;
 use riscv::register::stvec;
+use riscv::register::scause::Scause;
 
-global_asm!(include_str!("./interrupt.asm"))
+
+global_asm!(include_str!("./interrupt.asm"));
 
 // init interrupt
 // write tne entry of __interrupt into stvec and start interrupt function
@@ -21,6 +23,6 @@ pub fn init() {
 // Entry of interrupt handler
 
 #[no_mangle]
-pub fn handle_interrupt(context: &mut Context, scause: Scause. stval: usize) {
+pub fn handle_interrupt(context: &mut Context, scause: Scause, stval: usize) {
     panic!("Interrupted: {:?}", scause.cause());
 }

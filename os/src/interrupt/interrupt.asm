@@ -1,80 +1,83 @@
-# We will use macro to store register for loop
+# 我们将会用一个宏来用循环保存寄存器。这是必要的设置
 .altmacro
-# The number of bytes corresponding to the register width
+# 寄存器宽度对应的字节数
 .set    REG_SIZE, 8
-# Context size
+# Context 的大小
 .set    CONTEXT_SIZE, 34
 
-#  Macro: store register into stack
+# 宏：将寄存器存到栈上
 .macro SAVE reg, offset
-    sd \reg, \offset*8(sp)
+    sd  \reg, \offset*8(sp)
 .endm
 
-.macro SAVE_N n 
-    SAVE x\n, \n 
-.endm 
+.macro SAVE_N n
+    SAVE  x\n, \n
+.endm
 
-.macro LOAD_N n 
-    LOAD x\n, \n 
-.endm 
 
-    .section .text 
+# 宏：将寄存器从栈中取出
+.macro LOAD reg, offset
+    ld  \reg, \offset*8(sp)
+.endm
+
+.macro LOAD_N n
+    LOAD  x\n, \n
+.endm
+
+    .section .text
     .globl __interrupt
-
-# Into interrupt
-# Store Context && goto interrupt::handler::handle_interrupt()(Rust interrupt handler function)
-
+# 进入中断
+# 保存 Context 并且进入 Rust 中的中断处理函数 interrupt::handler::handle_interrupt()
 __interrupt:
-    # Open up the space required for Context on the stack
-    addi sp, sp, -34*8; #   sp =sp1 -34*8;m
-    
-    # Store general register apart from x0(is 0)
-    SAVE x1, 1
-    # Write the original sp (sp aka x2) into position 2
-    addi x1, sp, 34*8
-    SAVE x1, 2
-    # Save x3 to x31
-    .set n, 3
-    .rept 29
-        SAVE_N %n 
-        .set n, n+1
+    # 在栈上开辟 Context 所需的空间
+    addi    sp, sp, -34*8
+
+    # 保存通用寄存器，除了 x0（固定为 0）
+    SAVE    x1, 1
+    # 将原来的 sp（sp 又名 x2）写入 2 位置
+    addi    x1, sp, 34*8
+    SAVE    x1, 2
+    # 保存 x3 至 x31
+    .set    n, 3
+    .rept   29
+        SAVE_N  %n
+        .set    n, n + 1
     .endr
 
-    # Take out CSR and store
-    csrr s1, sstatus
-    csrr s2, sepc
-    SAVE s1, 32
-    SAVE s2, 33
+    # 取出 CSR 并保存
+    csrr    s1, sstatus
+    csrr    s2, sepc
+    SAVE    s1, 32
+    SAVE    s2, 33
 
-    # Call handle_interrupt and pass params
+    # 调用 handle_interrupt，传入参数
     # context: &mut Context
-    mv a0, sp
+    mv      a0, sp
     # scause: Scause
-    csrr a1, scause
+    csrr    a1, scause
     # stval: usize
-    csrr a2, stval
-    jal handle_interrupt
+    csrr    a2, stval
+    jal  handle_interrupt
 
     .globl __restore
-
-# Leave interrupt
-# Restore all registers from Context and jump to the position of sepc in Context     
+# 离开中断
+# 从 Context 中恢复所有寄存器，并跳转至 Context 中 sepc 的位置
 __restore:
-    # restore CSR
-    LOAD s1, 32
-    LOAD s2, 33
-    csrw sstatus, s1
-    csrw sepc, s2
+    # 恢复 CSR
+    LOAD    s1, 32
+    LOAD    s2, 33
+    csrw    sstatus, s1
+    csrw    sepc, s2
 
-    # restore general register
-    LOAD x1, 1
-    # Restore x3 to x31
-    .set n, 3
-    .rept 29
-        LOAD_N %n 
-        .set n, n+1
-    .endr 
+    # 恢复通用寄存器
+    LOAD    x1, 1
+    # 恢复 x3 至 x31
+    .set    n, 3
+    .rept   29
+        LOAD_N  %n
+        .set    n, n + 1
+    .endr
 
-    # Restore sp (aka x2) for use marco correctly
-    LOAD x2, 2
+    # 恢复 sp（又名 x2）这里最后恢复是为了上面可以正常使用 LOAD 宏
+    LOAD    x2, 2
     sret
