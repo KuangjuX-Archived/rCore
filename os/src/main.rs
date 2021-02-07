@@ -26,11 +26,10 @@ global_asm!(include_str!("entry.asm"));
 #[no_mangle]
 pub extern "C" fn rust_main() {
     interrupt::init();
-    println!("OK!");
-    println!("Hello rCore-Tutorial!");
-    unsafe {
-        llvm_asm!("ebreak"::::"volatile");
-    };
-    // unreachable!();
+
+    println!("Hello, rCore-Tutorial!");
+
+    // unsafe { llvm_asm!("ebreak") };
+
     // panic!("end of rust_main");
 }

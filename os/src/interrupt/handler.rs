@@ -37,6 +37,8 @@ pub fn handle_interrupt(context: &mut Context, scause: Scause, stval: usize) {
         Trap::Exception(Exception::Breakpoint) => breakpoint(context),
         // clock interrupt
         Trap::Interrupt(Interrupt::SupervisorTimer) => supervisor_timer(context),
+        // Visit a non-existent address
+        Trap::Exception(Exception::LoadFault) => load_falut(context, scause, stval),
         // Other Situations: Stop current thread
         _ => fault(context, scause, stval),
     };
@@ -57,6 +59,19 @@ fn breakpoint(context: &mut Context){
 /// Currently only counting in the [`timer`] module
 fn supervisor_timer(_: &mut Context) {
     timer::tick();
+}
+
+// Handler Load Fault
+fn load_falut(context: &mut Context, scause: Scause, stval: usize) {
+    if (stval == 0x0){
+        println!("Success!")
+    }
+    panic!(
+        "Interrupt: {:?}\n{:x?}\nstval: {:x}",
+        scause.cause(),
+        context,
+        stval
+    )
 }
 
 
