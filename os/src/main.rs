@@ -29,6 +29,8 @@ mod sbi;
 mod interrupt;
 mod memory;
 
+extern crate alloc;
+
 global_asm!(include_str!("entry.asm"));
 
 

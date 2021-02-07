@@ -4,6 +4,10 @@
 /// After compilation, this space will be placed in the bss section of 
 /// the OS execution program
 /// 
+use super::config::KERNEL_HEAP_SIZE;
+use buddy_system_allocator::LockedHeap;
+
+
 static mut HEAP_SPACE: [u8; KERNEL_HEAP_SIZE] = [0; KERNEL_HEAP_SIZE];
 
 /// Heap, dynamic memory allocator
@@ -18,9 +22,9 @@ static HEAP: LockedHeap = LockedHeap::empty();
 pub fn init() {
     // Tell the allocator to use this reserved space as a heap
     unsafe {
-        HEAP.lock().init{
-            HEAP_SPACE.as_ptr as usize, KERNEL_HEAP_SIZE
-        }
+        HEAP.lock().init(
+            HEAP_SPACE.as_ptr() as usize, KERNEL_HEAP_SIZE
+        )
     }
 }
 
