@@ -29,7 +29,7 @@ pub extern "C" fn rust_main() {
 
     println!("Hello, rCore-Tutorial!");
 
-    // unsafe { llvm_asm!("ebreak") };
+    unsafe { llvm_asm!("ebreak") };
 
     // panic!("end of rust_main");
 }

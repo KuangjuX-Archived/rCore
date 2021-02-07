@@ -10,7 +10,7 @@
 # 目前 _start 的功能：将预留的栈空间写入 $sp，然后跳转至 rust_main
 _start:
     la sp, boot_stack_top
-    call rust_main
+    jal rust_main
 
     # 回忆：bss 段是 ELF 文件中只记录长度，而全部初始化为 0 的一段内存空间
     # 这里声明字段 .bss.stack 作为操作系统启动时的栈

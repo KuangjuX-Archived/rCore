@@ -32,6 +32,7 @@ pub fn init() {
 #[no_mangle]
 pub fn handle_interrupt(context: &mut Context, scause: Scause, stval: usize) {
     // panic!("Interrupted: {:?}", scause.cause());
+    context.sepc = 0;
     match scause.cause() {
         // breakpoint interrupt(ebark)
         Trap::Exception(Exception::Breakpoint) => breakpoint(context),
@@ -51,6 +52,7 @@ pub fn handle_interrupt(context: &mut Context, scause: Scause, stval: usize) {
 fn breakpoint(context: &mut Context){
     println!("Breakpoint at 0x{:x}", context.sepc);
     context.sepc += 2;
+    // context.sepc = 0;
 }
 
 
