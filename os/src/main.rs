@@ -20,7 +20,7 @@
 //! implement the heap memory allocation in the original standard library.
 //! The language requires us to implement an error callback at the same time, 
 //! here we directly panic
-#![feature(alloc_error_handler)
+#![feature(alloc_error_handler)]
 
 #[macro_use]
 mod console;
@@ -47,7 +47,7 @@ pub extern "C" fn rust_main() {
     use alloc::boxed::Box;
     use alloc::vec::Vec;
     let v = Box::new(5);
-    assert_eq(*v, 5);
+    assert_eq!(*v, 5);
     core::mem::drop(v);
 
     let mut vec = Vec::new();
