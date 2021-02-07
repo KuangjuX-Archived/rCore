@@ -9,5 +9,5 @@ use riscv::register::{sstatus::Sstatus, scause::Scause};
 pub struct Context{
     pub x: [usize; 32], // 32 general register
     pub sstatus: Sstatus,
-    pub spec: usize
+    pub sepc: usize
 }

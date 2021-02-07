@@ -1,7 +1,9 @@
 use super::context::Context;
-use riscv::register::stvec;
-use riscv::register::scause::Scause;
-
+use super::timer;
+use riscv::register::{
+    scause::{Exception, Interrupt, Scause, Trap},
+    sie, stvec,
+};
 
 global_asm!(include_str!("./interrupt.asm"));
 
@@ -16,6 +18,8 @@ pub fn init() {
 
         // Use Direct Mode, set entry of interrupt `__interrupt`
         stvec::write(__interrupt as usize, stvec::TrapMode::Direct);
+
+        sie::set_sext();
     }
 }
 
@@ -32,10 +36,10 @@ pub fn handle_interrupt(context: &mut Context, scause: Scause, stval: usize) {
         // breakpoint interrupt(ebark)
         Trap::Exception(Exception::Breakpoint) => breakpoint(context),
         // clock interrupt
-        Trap::Interupt(Interupt::SupervisorTimer) => supervisor_timer(context),
+        Trap::Interrupt(Interrupt::SupervisorTimer) => supervisor_timer(context),
         // Other Situations: Stop current thread
         _ => fault(context, scause, stval),
-    }
+    };
 }
 
 /// Set ebreak breakpoint
@@ -51,7 +55,7 @@ fn breakpoint(context: &mut Context){
 /// Handler clock interrupt
 /// 
 /// Currently only counting in the [`timer`] module
-fn supervisor_timer(_: &Context) {
+fn supervisor_timer(_: &mut Context) {
     timer::tick();
 }
 

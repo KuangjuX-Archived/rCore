@@ -24,13 +24,13 @@ global_asm!(include_str!("entry.asm"));
 
 // override the _start function in crt0
 #[no_mangle]
-pub extern "C" fn rust_main() -> ! {
+pub extern "C" fn rust_main() {
     interrupt::init();
     println!("OK!");
     println!("Hello rCore-Tutorial!");
     unsafe {
         llvm_asm!("ebreak"::::"volatile");
     };
-    unreachable!();
+    // unreachable!();
     // panic!("end of rust_main");
 }
