@@ -25,7 +25,7 @@ impl PhysicalAddress {
 
 macro_rules! implement_address_to_page_number {
     // 这里面的类型转换实现 [`From`] trait，会自动实现相反的 [`Into`] trait
-    (addresstype:ty,page_number_type: ty) => {
+    ($address_type: ty, $page_number_type: ty) => {
         impl From<$page_number_type> for $address_type {
             /// 从页号转换为地址
             fn from(page_number: $page_number_type) -> Self {
