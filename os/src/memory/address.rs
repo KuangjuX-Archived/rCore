@@ -53,7 +53,7 @@ macro_rules! implement_address_to_page_number {
         }
     };
 }
-// implement_address_to_page_number! {PhysicalAddress, PhysicalPageNumber}
+implement_address_to_page_number! {PhysicalAddress, PhysicalPageNumber}
 
 // 下面这些以后可能会删掉一些
 
