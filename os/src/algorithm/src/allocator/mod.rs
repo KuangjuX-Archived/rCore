@@ -2,6 +2,7 @@
 
 mod stacked_allocator;
 mod bitmap_vector_allocator;
+mod segement_tree_allocator;
 
 /// 分配器：固定容量，每次分配 / 回收一个元素
 pub trait Allocator {
