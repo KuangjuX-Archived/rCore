@@ -28,6 +28,7 @@ pub trait VectorAllocator {
 
 pub use stacked_allocator::StackedAllocator;
 pub use bitmap_vector_allocator::BitmapVectorAllocator;
+pub use segement_tree_allocator::SegmentTreeAllocator;
 
 /// 默认使用的分配器
 pub type AllocatorImpl = StackedAllocator;
