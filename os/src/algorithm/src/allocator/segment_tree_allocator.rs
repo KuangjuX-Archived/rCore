@@ -10,11 +10,11 @@ pub struct SegmentTreeAllocator {
 
 impl Allocator for SegmentTreeAllocator {
     fn new(capacity: usize) -> Self {
-        leaf_count = capacity.next_power_of_two();
+        let leaf_count = capacity.next_power_of_two();
         let mut tree = vec![0u8; leaf_count * 2];
 
         for index in (capacity..capacity+8){
-            tree.set_bit(index, 1);
+            tree.set_bit(index, true);
         }
 
         for index in (1..leaf_count).rev() {
@@ -29,7 +29,7 @@ impl Allocator for SegmentTreeAllocator {
     fn alloc(&mut self) -> Option<usize> {
         let mut index = 1;
         if self.tree.get_bit(index) {
-            None
+            return None;
         }else{
             while index < self.tree.len(){
                 if(!self.tree.get_bit(index * 2)){
@@ -41,13 +41,13 @@ impl Allocator for SegmentTreeAllocator {
                 }
             }
         }
-        self.uploadNode(index, 1);
-        Some(index - self.tree.len());
+        self.uploadNode(index, true);
+        return Some(index - self.tree.len()/2);
       }
 
     fn dealloc(&mut self, index: usize) {
         let node = index + self.tree.len()/2;
-        self.uploadNode(node, 0);
+        self.uploadNode(node, false);
     }
 }
 
@@ -57,7 +57,7 @@ impl SegmentTreeAllocator{
         self.tree.set_bit(index, value);
         while index > 1 {
             index /= 2;
-            v = self.get_bit(2 * index) && self.get_bit(2 * index + 1);
+            let v = self.tree.get_bit(2 * index) && self.tree.get_bit(2 * index + 1);
             self.tree.set_bit(index, v);
         }
     }
