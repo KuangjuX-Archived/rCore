@@ -42,29 +42,7 @@ pub extern "C" fn rust_main() {
 
 
 
-    println!("Hello, rCore-Tutorial!");
-
-    // unsafe { llvm_asm!("ebreak") };
-
-    // use alloc::boxed::Box;
-    // use alloc::vec::Vec;
-    // let v = Box::new(5);
-    // assert_eq!(*v, 5);
-    // core::mem::drop(v);
-
-    // let mut vec = Vec::new();
-    // for i in 0..10000 {
-    //     vec.push(i);
-    // }
-
-    // assert_eq!(vec.len(), 10000);
-    // for (i, value) in vec.into_iter().enumerate() {
-    //     assert_eq!(value, i);
-    // }
-
-    // println!("heap test passed");
-
-    // println!("{}", *memory::config::KERNEL_END_ADDRESS);
+    println!("Hello, KuangjuX!");
 
     // 物理页分配
     for _ in 0..2 {
