@@ -13,9 +13,10 @@ impl Allocator for SegmentTreeAllocator {
         let leaf_count = capacity.next_power_of_two();
         let mut tree = vec![0u8; leaf_count * 2];
 
-        for index in (capacity..capacity+8){
+        for index in (capacity..leaf_count){
             tree.set_bit(index, true);
         }
+
 
         for index in (1..leaf_count).rev() {
             let value = tree.get_bit(2 * index) && tree.get_bit(2 * index + 1) && tree.get_bit(index);
