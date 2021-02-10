@@ -112,7 +112,7 @@ bitflags! {
 }
 
 macro_rules! implement_flags {
-    (field:ident,name: ident, $quote: literal) => {
+    ($field:ident,$name: ident, $quote: literal) => {
         impl Flags {
             #[doc = "返回 `Flags::"]
             #[doc = $quote]
