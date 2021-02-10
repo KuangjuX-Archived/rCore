@@ -21,3 +21,4 @@ lazy_static = { version = "1.4.0", features = ["spin_no_std"] }
 riscv = { git = "https://github.com/rcore-os/riscv", features = ["inline-asm"] }
 spin = "0.5.2"
 bit_field = "0.10.0"
+bitflags = "1.2.1"
