@@ -20,8 +20,7 @@ lazy_static! {
 /// 操作系统动态分配内存所用的堆大小（8M）
 pub const KERNEL_HEAP_SIZE: usize = 0x80_0000;
 
-
-// 内核使用线性映射的偏移量
+/// 内核使用线性映射的偏移量
 pub const KERNEL_MAP_OFFSET: usize = 0xffff_ffff_0000_0000;
 
 extern "C" {

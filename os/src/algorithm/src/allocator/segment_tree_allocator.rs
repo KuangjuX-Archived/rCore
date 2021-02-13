@@ -36,7 +36,7 @@ impl Allocator for SegmentTreeAllocator {
                 if(!self.tree.get_bit(index * 2)){
                     index *= 2;
                 }else if(!self.tree.get_bit(index * 2 + 1)){
-                    index *= 2 + 1;
+                    index = index * 2 + 1;
                 }else {
                     panic!("Damaged Segement Tree!");
                 }
