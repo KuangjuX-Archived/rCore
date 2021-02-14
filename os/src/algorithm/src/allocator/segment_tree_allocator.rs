@@ -18,12 +18,13 @@ impl Allocator for SegmentTreeAllocator {
         }
 
 
+
         for index in (1..leaf_count).rev() {
             let value = tree.get_bit(2 * index) && tree.get_bit(2 * index + 1) && tree.get_bit(index);
             tree.set_bit(index, value);
         }
 
-        SegmentTreeAllocator{tree}
+        Self{ tree }
 
     }
 
@@ -32,7 +33,7 @@ impl Allocator for SegmentTreeAllocator {
         if self.tree.get_bit(index) {
             return None;
         }else{
-            while index < self.tree.len(){
+            while index < self.tree.len()/2{
                 if(!self.tree.get_bit(index * 2)){
                     index *= 2;
                 }else if(!self.tree.get_bit(index * 2 + 1)){
@@ -63,3 +64,10 @@ impl SegmentTreeAllocator{
         }
     }
 }
+
+
+
+
+
+
+
