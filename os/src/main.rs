@@ -1,4 +1,5 @@
 // Disable standard library
+
 #![no_std]
 
 // Do not use all Rust-level entries such as the'main' function as the program entry
@@ -28,8 +29,11 @@ mod panic;
 mod sbi;
 mod interrupt;
 mod memory;
+mod process;
 
 extern crate alloc;
+
+use process::*;
 
 global_asm!(include_str!("entry.asm"));
 
@@ -63,5 +67,24 @@ pub extern "C" fn rust_main() {
     println!("kernel remapped");
 
 
-    panic!("end of rust_main");
+    extern "C" {
+        fn __restore(context: usize);
+    }
+    // 获取第一个线程的 Context，具体原理后面讲解
+    let context = PROCESSOR.lock().prepare_next_thread();
+    // 启动第一个线程
+    unsafe { __restore(context as usize) };
+    unreachable!();
+
+
+    // panic!("end of rust_main");
+}
+
+
+/// 内核线程需要调用这个函数来退出
+fn kernel_thread_exit() {
+    // 当前线程标记为结束
+    PROCESSOR.lock().current_thread().as_ref().inner().dead = true;
+    // 制造一个中断来交给操作系统处理
+    unsafe { llvm_asm!("ebreak" :::: "volatile") };
 }

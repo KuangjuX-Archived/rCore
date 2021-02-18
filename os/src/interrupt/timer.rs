@@ -15,7 +15,7 @@ pub fn init() {
         // Start STIE to enable clock interrupt
         sie::set_stimer();
         // Start SIE (not sie register), Allow kernel mode to be interrupted by interrupt
-        sstatus::set_sie();
+        // sstatus::set_sie();
     }
     // Set the next clock interrupt
     set_next_timeout();
