@@ -127,4 +127,9 @@ impl Processor {
         let thread = self.current_thread.take().unwrap();
         self.scheduler.remove_thread(&thread);
     }
+
+    pub fn fork_current_thread(&mut self, context: &Context){
+        let thread = self.current_thread().fork(*context).unwrap();
+        self.add_thread(thread);
+    }
 }

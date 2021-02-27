@@ -89,6 +89,15 @@ fn supervisor_timer(context: &mut Context) -> *mut Context {
 fn supervisor_external(context: &mut Context) -> *mut Context {
     let mut c = console_getchar();
     if c <= 255 {
+        // interrupt current thread
+        if c == 3 {
+            PROCESSOR.lock().kill_current_thread();
+            PROCESSOR.lock().prepare_next_thread();
+        }
+        // fork
+        if c == 'F' as usize{
+            PROCESSOR.lock().fork_current_thread(context);
+        }
         if c == '\r' as usize {
             c = '\n' as usize;
         }

@@ -88,6 +88,40 @@ impl Thread {
     pub fn inner(&self) -> spin::MutexGuard<ThreadInner> {
         self.inner.lock()
     }
+
+    // fork thread and return
+    pub fn fork(&self, current_context: Context) -> MemoryResult<Arc<Thread>> {
+        println!("fork!");
+        let stack = self
+        .process
+        .alloc_page_range(STACK_SIZE, Flags::READABLE | Flags::WRITABLE)?;
+
+        for i in 0..STACK_SIZE{
+            *VirtualAddress(stack.start.0 + i).deref::<u8>() = *VirtualAddress(self.stack.start.0 + i).deref::<u8>();
+        }
+
+        let mut context = current_context.clone();
+        context.set_sp(usize::from(stack.start) - usize::from(self.stack.start) + current_context.sp());
+
+        let process = self.process.clone();
+
+        let thread = Arc::new(Thread{
+            id : unsafe{
+                THREAD_COUNTER += 1;
+                THREAD_COUNTER
+            },
+            stack,
+            process,
+            inner : Mutex::new(ThreadInner{
+                context: Some(context),
+                sleeping: false,
+                dead: false
+            })
+
+        });
+        Ok(thread)
+
+    }
 }
 
 /// 通过线程 ID 来判等

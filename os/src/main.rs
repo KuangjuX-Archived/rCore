@@ -69,6 +69,7 @@ pub extern "C" fn rust_main(_hart_id: usize, dtb_pa: PhysicalAddress) -> ! {
     interrupt::init();
     // drivers::init(dtb_pa);
     // fs::init();
+    println!("Hello, KuangjuX!\n");
 
     {
         let mut processor = PROCESSOR.lock();
