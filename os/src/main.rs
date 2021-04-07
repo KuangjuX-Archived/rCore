@@ -67,7 +67,7 @@ global_asm!(include_str!("entry.asm"));
 pub extern "C" fn rust_main(_hart_id: usize, dtb_pa: PhysicalAddress) -> ! {
     memory::init();
     interrupt::init();
-    // drivers::init(dtb_pa);
+    drivers::init(dtb_pa);
     // fs::init();
     println!("Hello, KuangjuX!\n");
 
